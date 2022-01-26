@@ -1,3 +1,30 @@
+# The Citadel NFT Game
+
+## Plot
+The middle-age citadels are located in the settlements around the world and being built to withstand the coming global siege.
+Starting from the siege date towers are getting attacked.
+
+## Parameters
+
+Siege start: `DAY`
+Tower: NFT with a given generative Name and Artwork.
+Build citadel = mint NFT token.
+Mint cost: 0.04 BNB
+Reinforce
+
+## Roadmap
+- [x] Smart Contract development.
+- [x] Basic Web App. 
+- [ ] Plot finalization.
+- [ ] App update if needed.
+- [ ] NFT generation program.
+- [ ] Web App design.
+- [ ] Web App development.
+- [ ] Discord bot development to update hits.
+- [ ] Discord channel setup for informing of the coming mint.
+- [ ] Setting up start roadmap - giveaways, mint start date(s), periods, siege date.
+- [ ] Launch.
+
 # Advanced Sample Hardhat Project
 
 This project demonstrates an advanced Hardhat use case, integrating other tools commonly used alongside Hardhat in the ecosystem.

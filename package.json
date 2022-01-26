@@ -1,6 +1,12 @@
 {
   "name": "citadel-evm-contract",
   "packageManager": "yarn@3.1.0",
+  "scripts": {
+    "compile": "hardhat compile",
+    "accounts": "hardhat accounts",
+    "deploy": "hardhat deploy",
+    "test": "hardhat test"
+  },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.4",
     "@nomiclabs/hardhat-etherscan": "^2.1.3",

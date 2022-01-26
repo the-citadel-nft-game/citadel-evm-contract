@@ -14,12 +14,15 @@ async function main() {
   // await hre.run('compile');
 
   // We get the contract to deploy
-  const Greeter = await ethers.getContractFactory("Greeter");
-  const greeter = await Greeter.deploy("Hello, Hardhat!");
+  const Citadel = await ethers.getContractFactory("Citadel");
 
-  await greeter.deployed();
+  //1 arg is a cityroot, e.g. 0x430a7680ca49d499ba2515b1658b7f69e3717b89f68a5f738c35cb01132f961a was used for 0xd6e382aa7A09fc4A09C2fb99Cfce6A429985E65d
+  //2 arg is a NFT contract one holds for early mint: (e.g. 0x9Abb7BdDc43FA67c76a62d8C016513827f59bE1b) can be zero
+  const citadel = await Citadel.deploy('0x430a7680ca49d499ba2515b1658b7f69e3717b89f68a5f738c35cb01132f961a','0');
 
-  console.log("Greeter deployed to:", greeter.address);
+  await citadel.deployed();
+
+  console.log("Citadel deployed to:", citadel.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
