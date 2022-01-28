@@ -10,6 +10,8 @@ import "@openzeppelin/contracts/interfaces/IERC721Receiver.sol";
 //ERC721 is already ERC16 so no need to inherit twice
 contract Citadel is IERC721, IERC721Metadata{
 
+    // _earlyAccessHolders - external NFT holder for early mint
+    //TODO _cityRoot - ?
     constructor(bytes32 _cityRoot, address _earlyAccessHolders){
         supportedInterfaces[0x80ac58cd] = true; //ERC721
         supportedInterfaces[0x5b5e139f] = true; //ERC721Metadata
@@ -36,17 +38,20 @@ contract Citadel is IERC721, IERC721Metadata{
     //  use tokenIndexToCity for isValidToken
 
     //    METADATA VARS
-    string private __name = "Doomsday NFT";
-    string private __symbol = "BUNKER";
-    bytes private __uriBase = bytes("https://gateway.pinata.cloud/ipfs/QmUwPH9PmTQrT67M633AJRXACsecmRTihf4DUbJZb9y83M/");
-    bytes private __uriSuffix = bytes(".json");
+    string private __name = "Citadel NFT game";
+    string private __symbol = "CITADEL";
+//    bytes private __uriBase = bytes("https://gateway.pinata.cloud/ipfs/QmUwPH9PmTQrT67M633AJRXACsecmRTihf4DUbJZb9y83M/");
+    bytes private __uriBase = bytes("https://media.istockphoto.com/vectors/castle-tower-vector-id1003186156?k=20&m=1003186156&s=612x612&w=0&h=4BE1Vx3Rmj933gspqShngkSnfYWOOE6H88kV5edZIRo=");
+    bytes private __uriSuffix = bytes("");
+//    bytes private __uriSuffix = bytes(".json");
 
     //  Game vars
-    uint constant MAX_CITIES = 38611;       //from table
+    //cities on the map
+    uint constant MAX_CITIES = 100;       //from table
 
-    int64 constant MAP_WIDTH         = 4320000;   //map units
-    int64 constant MAP_HEIGHT        = 2588795;   //map units
-    int64 constant BASE_BLAST_RADIUS = 100000;   //map units
+    int64 constant MAP_WIDTH         = 1000;   //map units
+    int64 constant MAP_HEIGHT        = 700;   //map units
+    int64 constant BASE_BLAST_RADIUS = 50;   //map units
 
     uint constant MINT_COST = 0.04 ether; //it's in BNB but here 'ether' is used for 1e18
 
@@ -58,7 +63,8 @@ contract Citadel is IERC721, IERC721Metadata{
     uint constant REINFORCE_PERCENT_CREATOR = 10;
 
 
-    uint constant IMPACT_BLOCK_INTERVAL = 120;
+//    uint constant IMPACT_BLOCK_INTERVAL = 600; //BSC creates a block every 3s, so every 30 min means 30*60/3 = 600
+    uint constant IMPACT_BLOCK_INTERVAL = 1; //BSC creates a block every 3s, so every 30 min means 30*60/3 = 600
 
     mapping(uint16 => uint) public cityToToken;
     mapping(uint16 => int64[2]) coordinates;

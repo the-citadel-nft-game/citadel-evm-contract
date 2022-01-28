@@ -4,7 +4,7 @@
   "scripts": {
     "compile": "hardhat compile",
     "accounts": "hardhat accounts",
-    "deploy": "hardhat deploy",
+    "deploy": "hardhat run ./scripts/deploy.ts",
     "test": "hardhat test"
   },
   "devDependencies": {

@@ -1,29 +1,78 @@
 # The Citadel NFT Game
+Doomsday-inspired NFT game for Binance Smart Chain and Avalanche.
 
 ## Plot
 The middle-age citadels are located in the settlements around the world and being built to withstand the coming global siege.
 Starting from the siege date towers are getting attacked.
 
-## Parameters
-
+## Initial parameters
 Siege start: `DAY`
 Tower: NFT with a given generative Name and Artwork.
 Build citadel = mint NFT token.
 Mint cost: 0.04 BNB
 Reinforce
 
+## Cities
+Cities' coordinates are secured with a Merkle Tree.
+A Tree is build so that `leafs` are encoded cities coordinates  `bytes32 leaf = keccak256(coordinates[0],coordinates[1]);`.
+Hashes can be checked [here](https://emn178.github.io/online-tools/keccak_256.html). 
+- At first, `cityRoot` is specified in the constructor.
+- Then, with every mint (`inhabit`), a `leaf` is passed to `inhabit` mint function together with coordinates and any other leaf in a `proof` variable.
+
+Database is downloaded from https://simplemaps.com/data/world-cities
+
+## Map
+Equidistant Cylindrical Projection type map.
+City x,y coordinates is converted from latitude and longitude in the following way:
+x = (total width of image in px) * (180 + longitude) / 360
+y = (total height of image in px) * (90 - latitude) / 180
+
+![](https://desktop.arcgis.com/en/arcmap/latest/map/projections/GUID-5EE3649E-A5E7-4BD3-9E61-D9C06DBAD860-web.png)
+
+
+## Contract Data
+`owner` - the NFT owner 
+`cityToToken` - serial number of a city to tokenId
+
+## Contract Lifecycle
+
+
+
+## Test Scenario
+1. Mint contract with the coordinates `inhabit()`.
+2. set image for suffix setUriComponents(string calldata _newBase, string calldata _newSuffix)
+3. Reinforce with `reinforce(uint _tokenId)`
+4. `confirmHit`
+5. `getEvacuationRebate`
+6. Burn `evacuate`
+
+7. _tokenId making NFT unique is a serial number of the citadel.
+   setOwner
+setUriComponents(string calldata _newBase, string calldata _newSuffix)
+
+getStructuralData
+
 ## Roadmap
 - [x] Smart Contract development.
-- [x] Basic Web App. 
+- [x] Basic Web App.
+- [x] Unit Test.
 - [ ] Plot finalization.
 - [ ] App update if needed.
+- [ ] Merkle tree with cities coordinates generation.
 - [ ] NFT generation program.
 - [ ] Web App design.
 - [ ] Web App development.
-- [ ] Discord bot development to update hits.
+- [ ] Discord bot development to update game events and stats on hits, damages, and reinforcements.
 - [ ] Discord channel setup for informing of the coming mint.
 - [ ] Setting up start roadmap - giveaways, mint start date(s), periods, siege date.
 - [ ] Launch.
+
+##License
+MIT,
+Basic World Cities Database: The Provider offers a Basic World Cities Database free of charge. This database is licensed under the Creative Commons Attribution 4.0 license as described at: https://creativecommons.org/licenses/by/4.0/.
+Urmayev II Cylindrical Map Projection Image by Tobias Jung is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
+https://map-projections.net/license/urmayev-cylindrical-2:mapimg-ssw
+
 
 # Advanced Sample Hardhat Project
 
