@@ -29,7 +29,7 @@ function generateCityTree() {
   //
   // 0x2e3aa5c98b2ae7ee7ab20da40e376524358e8557cc9a8dcb1a1585acfd844492
   console.log(city1);
-  return city1;
+  return cityroot;
 
 }
 
@@ -49,11 +49,11 @@ async function main() {
   //1 arg is a cityroot, e.g. 0x430a7680ca49d499ba2515b1658b7f69e3717b89f68a5f738c35cb01132f961a was used for 0xd6e382aa7A09fc4A09C2fb99Cfce6A429985E65d
   //2 arg is a NFT contract one holds for early mint: (e.g. 0x9Abb7BdDc43FA67c76a62d8C016513827f59bE1b) can be zero
   const cityroot = generateCityTree();
-  // const citadel = await Citadel.deploy('0x430a7680ca49d499ba2515b1658b7f69e3717b89f68a5f738c35cb01132f961a','0');
+  const citadel = await Citadel.deploy(cityroot);
 
-  // await citadel.deployed();
+  await citadel.deployed();
 
-  // console.log("Citadel deployed to:", citadel.address);
+  console.log("Citadel deployed to:", citadel.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

@@ -12,7 +12,7 @@ contract Citadel is IERC721, IERC721Metadata{
 
     // _earlyAccessHolders - external NFT holder for early mint
     //TODO _cityRoot - ?
-    constructor(bytes32 _cityRoot, address _earlyAccessHolders){
+    constructor(bytes32 _cityRoot){
         supportedInterfaces[0x80ac58cd] = true; //ERC721
         supportedInterfaces[0x5b5e139f] = true; //ERC721Metadata
         //        supportedInterfaces[0x780e9d63] = true; //ERC721Enumerable
@@ -21,11 +21,9 @@ contract Citadel is IERC721, IERC721Metadata{
         owner = msg.sender;
         cityRoot = _cityRoot;
 
-        earlyAccessHolders = _earlyAccessHolders;
     }
 
     address public owner;
-    address earlyAccessHolders;
 
     //////===721 Implementation
     mapping(address => uint256) internal balances;
@@ -136,7 +134,7 @@ contract Citadel is IERC721, IERC721Metadata{
         require(stage() == Stage.PreApocalypse,"stage");
         if(block.timestamp < startTime + EARLY_ACCESS_TIME){
             //First day is insiders list
-            require(IERC721(earlyAccessHolders).balanceOf(msg.sender) > 0,"early");
+//            require(IERC721(earlyAccessHolders).balanceOf(msg.sender) > 0,"early");
         }
 
 
