@@ -38,18 +38,18 @@ contract Citadel is IERC721, IERC721Metadata{
     //    METADATA VARS
     string private __name = "Citadel NFT game";
     string private __symbol = "CITADEL";
-//    bytes private __uriBase = bytes("https://gateway.pinata.cloud/ipfs/QmUwPH9PmTQrT67M633AJRXACsecmRTihf4DUbJZb9y83M/");
+    //    bytes private __uriBase = bytes("https://gateway.pinata.cloud/ipfs/QmUwPH9PmTQrT67M633AJRXACsecmRTihf4DUbJZb9y83M/");
     bytes private __uriBase = bytes("https://media.istockphoto.com/vectors/castle-tower-vector-id1003186156?k=20&m=1003186156&s=612x612&w=0&h=4BE1Vx3Rmj933gspqShngkSnfYWOOE6H88kV5edZIRo=");
     bytes private __uriSuffix = bytes("");
-//    bytes private __uriSuffix = bytes(".json");
+    //    bytes private __uriSuffix = bytes(".json");
 
     //  Game vars
     //cities on the map
     uint constant MAX_CITIES = 100;       //from table
 
-    int64 constant MAP_WIDTH         = 1000;   //map units
-    int64 constant MAP_HEIGHT        = 700;   //map units
-    int64 constant BASE_BLAST_RADIUS = 50;   //map units
+    int16 constant MAP_WIDTH         = 1000;   //map units
+    int16 constant MAP_HEIGHT        = 700;   //map units
+    int16 constant BASE_BLAST_RADIUS = 50;   //map units
 
     uint constant MINT_COST = 0.04 ether; //it's in BNB but here 'ether' is used for 1e18
 
@@ -61,11 +61,11 @@ contract Citadel is IERC721, IERC721Metadata{
     uint constant REINFORCE_PERCENT_CREATOR = 10;
 
 
-//    uint constant IMPACT_BLOCK_INTERVAL = 600; //BSC creates a block every 3s, so every 30 min means 30*60/3 = 600
+    //    uint constant IMPACT_BLOCK_INTERVAL = 600; //BSC creates a block every 3s, so every 30 min means 30*60/3 = 600
     uint constant IMPACT_BLOCK_INTERVAL = 1; //BSC creates a block every 3s, so every 30 min means 30*60/3 = 600
 
     mapping(uint16 => uint) public cityToToken;
-    mapping(uint16 => int64[2]) coordinates;
+    mapping(uint16 => int16[2]) coordinates;
     bytes32 cityRoot;
 
     event Inhabit(uint16 indexed _cityId, uint256 indexed _tokenId);
@@ -130,11 +130,11 @@ contract Citadel is IERC721, IERC721Metadata{
     }
 
     // mint the NFT
-    function inhabit(uint16 _cityId, int64[2] calldata _coordinates, bytes32[] memory proof) public payable{
+    function inhabit(uint16 _cityId, int16[2] calldata _coordinates, bytes32[] memory proof) public payable{
         require(stage() == Stage.PreApocalypse,"stage");
         if(block.timestamp < startTime + EARLY_ACCESS_TIME){
             //First day is insiders list
-//            require(IERC721(earlyAccessHolders).balanceOf(msg.sender) > 0,"early");
+            //            require(IERC721(earlyAccessHolders).balanceOf(msg.sender) > 0,"early");
         }
 
 
@@ -145,16 +145,18 @@ contract Citadel is IERC721, IERC721Metadata{
         require(cityToToken[_cityId] == 0 && coordinates[_cityId][0] == 0 && coordinates[_cityId][1] == 0,"inhabited");
 
         require(
-            _coordinates[0] >= -MAP_WIDTH/2 &&
-        _coordinates[0] <= MAP_WIDTH/2 &&
+            _coordinates[0] >= 0 &&
+            _coordinates[0] <= MAP_WIDTH &&
 
-        _coordinates[1] >= -MAP_HEIGHT/2 &&
-        _coordinates[1] <= MAP_HEIGHT/2,
+            _coordinates[1] >= 0 &&
+            _coordinates[1] <= MAP_HEIGHT,
             "off map"
         );  //Not strictly necessary but proves the whitelist hasnt been fucked with
 
 
-        require(msg.value == MINT_COST,"cost");
+        require(msg.value == MINT_COST
+
+        ,"cost");
 
         coordinates[_cityId] = _coordinates;
 
