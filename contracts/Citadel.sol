@@ -85,6 +85,7 @@ contract Citadel is IERC721, IERC721Metadata{
 
         return (reinforcement, damage, lastImpact);
     }
+
     function setStructuralData(uint _tokenId, uint8 reinforcement, uint8 damage, bytes32 lastImpact) internal{
         bytes32 _reinforcement = bytes32(uint(reinforcement));
         bytes32 _damage = bytes32(uint(damage)) << 8;
@@ -112,28 +113,28 @@ contract Citadel is IERC721, IERC721Metadata{
     uint SALE_TIME = 7 days;
     uint EARLY_ACCESS_TIME = 1 days;
 
-    function startPreApocalypse() public{
+    function startPreSiege() public{
         require(msg.sender == owner,"owner");
 
         require(startTime == 0,"started");
         startTime = block.timestamp;
     }
-    enum Stage {Initial,PreApocalypse,Apocalypse,PostApocalypse}
+    enum Stage {Initial,PreSiege,Siege,PostSiege}
     function stage() public view returns(Stage){
         if(startTime == 0){
             return Stage.Initial;
         }else if(block.timestamp < startTime + SALE_TIME && tokenIndexToCity.length < MAX_CITIES){
-            return Stage.PreApocalypse;
+            return Stage.PreSiege;
         }else if(destroyed < tokenIndexToCity.length - 1){
-            return Stage.Apocalypse;
+            return Stage.Siege;
         }else{
-            return Stage.PostApocalypse;
+            return Stage.PostSiege;
         }
     }
 
     // mint the NFT
     function inhabit(uint16 _cityId, int16[2] calldata _coordinates, bytes32[] memory proof) public payable{
-        require(stage() == Stage.PreApocalypse,"stage");
+        require(stage() == Stage.PreSiege,"stage");
         if(block.timestamp < startTime + EARLY_ACCESS_TIME){
             //First day is insiders list
             //            require(IERC721(earlyAccessHolders).balanceOf(msg.sender) > 0,"early");
@@ -181,7 +182,7 @@ contract Citadel is IERC721, IERC721Metadata{
 
         Stage _stage = stage();
 
-        require(_stage == Stage.PreApocalypse || _stage == Stage.Apocalypse,"stage");
+        require(_stage == Stage.PreSiege || _stage == Stage.Siege,"stage");
 
         require(ownerOf(_tokenId) == msg.sender,"owner");
 
@@ -190,7 +191,7 @@ contract Citadel is IERC721, IERC721Metadata{
 
         (uint8 _reinforcement, uint8 _damage, bytes32 _lastImpact) = getStructuralData(_tokenId);
 
-        if(_stage == Stage.Apocalypse){
+        if(_stage == Stage.Siege){
             require(!checkVulnerable(_tokenId,_lastImpact),"vulnerable");
         }
 
@@ -208,14 +209,14 @@ contract Citadel is IERC721, IERC721Metadata{
     }
     function evacuate(uint _tokenId) public{
         Stage _stage = stage();
-        require(_stage == Stage.PreApocalypse || _stage == Stage.Apocalypse,"stage");
+        require(_stage == Stage.PreSiege || _stage == Stage.Siege,"stage");
 
         require(ownerOf(_tokenId) == msg.sender,"owner");
 
         // covered by isValidToken in ownerOf
         //        require(_damage <= _reinforcement,"eliminated" );
 
-        if(_stage == Stage.Apocalypse){
+        if(_stage == Stage.Siege){
             require(!isVulnerable(_tokenId),"vulnerable");
         }
 
@@ -257,7 +258,7 @@ contract Citadel is IERC721, IERC721Metadata{
     }
 
     function confirmHit(uint _tokenId) public{
-        require(stage() == Stage.Apocalypse,"stage");
+        require(stage() == Stage.Siege,"stage");
         require(isValidToken(_tokenId),"invalid");
 
         (uint8 _reinforcement, uint8 _damage, bytes32 _lastImpact) = getStructuralData(_tokenId);
@@ -291,7 +292,7 @@ contract Citadel is IERC721, IERC721Metadata{
 
 
     function winnerWithdraw(uint _winnerTokenId) public{
-        require(stage() == Stage.PostApocalypse,"stage");
+        require(stage() == Stage.PostSiege,"stage");
         require(isValidToken(_winnerTokenId),"invalid");
 
         // Implicitly makes sure its the right token since all others don't exist
