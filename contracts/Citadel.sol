@@ -7,6 +7,8 @@ import "@openzeppelin/contracts/interfaces/IERC721.sol";
 import "@openzeppelin/contracts/interfaces/IERC721Metadata.sol";
 import "@openzeppelin/contracts/interfaces/IERC721Receiver.sol";
 
+import "hardhat/console.sol";
+
 //ERC721 is already ERC16 so no need to inherit twice
 contract Citadel is IERC721, IERC721Metadata{
 
@@ -153,10 +155,9 @@ contract Citadel is IERC721, IERC721Metadata{
             "off map"
         );  //Not strictly necessary but proves the whitelist hasnt been fucked with
 
+        console.log("msg.value", msg.value);
 
-        require(msg.value == MINT_COST
-
-        ,"cost");
+        require(msg.value == MINT_COST,"cost");
 
         coordinates[_cityId] = _coordinates;
 

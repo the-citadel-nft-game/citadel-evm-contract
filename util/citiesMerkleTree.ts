@@ -75,6 +75,5 @@ export function getLeaf(index: number) {
 
 export function getProof(index: number) {
     const leaf = keccak256(encodedCitiesIdAndCoordinates[index]);
-    const proof = merkleTree.getHexProof(leaf);
-    return proof;
+    return merkleTree.getHexProof(leaf);
 }
